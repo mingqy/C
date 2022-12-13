@@ -4,7 +4,7 @@
 
 #define   MONTHS  12
 
-#define   MAX_LEN  20           //×Ö·û´®×î´ó³¤¶È
+#define   MAX_LEN  20           //å­—ç¬¦ä¸²æœ€å¤§é•¿åº¦
 
 
 
@@ -17,15 +17,15 @@ int    pos1,pos2;
 char   x[MAX_LEN];
 char   monthsWords[][MAX_LEN] = {"January","February","March","April","May","June","July","August","September","October","November","December"};
 char   monthsAbbr[][MAX_LEN] = {"Jan.","Feb.","Mar.","Apr.","May.","Jun.","Jul.","Aug.","Sept.","Oct.","Nov.","Dec."};
-char monthsChinese[][MAX_LEN] = {"ÔªÔÂÔªµ©","¶şÔÂ´º½Ú","ÈıÔÂÖ²Ê÷","ËÄÔÂÇåÃ÷","ÎåÔÂÀÍ¶¯","ÁùÔÂ¶ùÍ¯","ÆßÔÂÆßÏ¦","°ËÔÂÖĞÇï","¾ÅÔÂ¿ªÑ§","Ê®ÔÂ¹úÇì","Ê®Ò»ÔÂ¹â¹÷","Ê®¶şÔÂÊ¥µ®"};
+char monthsChinese[][MAX_LEN] = {"å…ƒæœˆå…ƒæ—¦","äºŒæœˆæ˜¥èŠ‚","ä¸‰æœˆæ¤æ ‘","å››æœˆæ¸…æ˜","äº”æœˆåŠ³åŠ¨","å…­æœˆå„¿ç«¥","ä¸ƒæœˆä¸ƒå¤•","å…«æœˆä¸­ç§‹","ä¹æœˆå¼€å­¦","åæœˆå›½åº†","åä¸€æœˆå…‰æ£","åäºŒæœˆåœ£è¯"};
 printf("Please enter a string:\n");
-scanf("%s", x);                 //ÊäÈë´ı²éÕÒµÄ×Ö·û´®
+scanf("%s", x);                 //è¾“å…¥å¾…æŸ¥æ‰¾çš„å­—ç¬¦ä¸²
 /***************Begin**************/
-//´Ë´¦Ó¦ÓÃº¯Êıµ÷ÓÃ
+//æ­¤å¤„åº”ç”¨å‡½æ•°è°ƒç”¨
 pos1=FindWord(monthsWords,12,x);
 pos2=FindWord(monthsAbbr,12,x);
 /***************End***************/
-if (pos1>=0)                //ÕÒµ½±êÖ¾ÎªÕæ£¬ËµÃ÷ÕÒµ½
+if (pos1>=0)                //æ‰¾åˆ°æ ‡å¿—ä¸ºçœŸï¼Œè¯´æ˜æ‰¾åˆ°
 {
 
 printf("%s: %s\n", x, monthsChinese[pos1]);
@@ -41,7 +41,7 @@ printf("%s: %s\n", x, monthsChinese[pos2]);
 //printf("%s: %s\n", x, *(monthsChinese+pos2));
 
 }
-else                        //ÕÒµ½±êÖ¾Îª¼Ù£¬ËµÃ÷Î´ÕÒµ½
+else                        //æ‰¾åˆ°æ ‡å¿—ä¸ºå‡ï¼Œè¯´æ˜æœªæ‰¾åˆ°
 {
 
 printf("Not found!\n");
@@ -49,8 +49,8 @@ printf("Not found!\n");
 }
 return 0;
 }
-//ÔÚµ¥´Ê±íÖĞÕÒx×Ö·û´®£¬ÈôÕÒµ½£¬·µ»ØÆäÎ»ÖÃ£¨Î»ÖÃ´Ó0¿ªÊ¼£©
-//ÈôÕÒ²»µ½Ôò·µ»Ø-1
+//åœ¨å•è¯è¡¨ä¸­æ‰¾xå­—ç¬¦ä¸²ï¼Œè‹¥æ‰¾åˆ°ï¼Œè¿”å›å…¶ä½ç½®ï¼ˆä½ç½®ä»0å¼€å§‹ï¼‰
+//è‹¥æ‰¾ä¸åˆ°åˆ™è¿”å›-1
 int FindWord(char mws[][MAX_LEN],int n,char x[])
 {
 /***************Begin**************/
