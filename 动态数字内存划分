@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include <stdlib.h>
+typedef struct
+{
+    int *array;
+    int length;
+} DArray;
+DArray create(int n)
+{
+    DArray a;
+    int i;
+    a.array=(int *)malloc(sizeof(int)*n);
+    if(a.array==NULL)
+    {
+        printf("error!");
+        exit(0);
+    }
+    else
+    {
+        a.length=n;
+        for(i=0;i<a.length;i++)
+        {
+            scanf("%d",&a.array[i]);
+        }
+        return a;
+    }
+}
+void release(DArray *p)
+{
+    free(p -> array);
+}
+void grow(DArray *aPtr,int n)
+{
+    int *p;
+    int i;
+    p=(int *)realloc(aPtr,sizeof(int)*n);
+    if(p==NULL)
+    {
+        printf("error!");
+        exit(0);
+    }
+    else
+    {
+        for(i=0;i<aPtr -> length;i++)
+        {
+            p[i]=aPtr -> array[i];
+        }
+        for(i=aPtr -> length;i<n;i++)
+        {
+            scanf("%d",&p[i]);
+        }
+        free(aPtr -> array);
+        aPtr -> array=p;
+        aPtr -> length=n;
+    }
+}
+void print(DArray *a)
+{
+    int i;
+    for(i=0;i<a->length;i++)
+    {
+        printf("%d",a->array[i]);
+    }
+}
+int main()
+{
+    DArray a;
+    int n;
+    scanf("%d",&n);
+    a=create(n);
+    print(&a);
+    grow(&a,n*2);
+    print(&a);
+    release(&a);
+    return 0;
+}
