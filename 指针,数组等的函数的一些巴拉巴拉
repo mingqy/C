@@ -1,0 +1,87 @@
+//比较大小实现替换的函数
+void res(int *a, int *b, int *type)
+{   
+    if (*a > *b)
+    {
+        int t;
+        t = *a;
+        *a = *b;
+        *b = t;
+    }
+}
+//计算出2×Ｍ整型二维数组中最大元素的值，并将此值返回调用函数
+int fun(int a[][M])
+{
+  int x,y,max=0;
+  for(x=0;x<2;x++)
+    {
+        for(y=0;y<M;y++)
+        {
+        if(a[x][y]>max)
+        {
+            max=a[x][y];
+        }
+        }
+    }
+     return max;
+}
+//逆序输出数组
+int n,a[N],i;
+
+    scanf("%d",&n);
+
+    for(i=0;i<n;i++)
+
+    {
+
+        scanf("%d",&a[i]);
+
+    }
+
+    int temp,j;
+
+    for(j=0;j<(n/2);j++)
+
+    {
+
+        temp=a[j];
+
+        a[j]=a[n-j-1];
+
+        a[n-j-1]=temp;
+
+    }
+
+    int x;
+
+    for(x=0;x<n;x++)
+
+    {
+
+        printf("%d ",a[x]);
+
+    }
+    //用静态局部变量计算n的阶乘
+    long Func(int n)
+{
+    static long p=1;
+    p=p*n;
+    return p;
+}
+//递归
+int ack(int m, int n)
+{
+    if(m==0)
+    {
+        return n+1;
+    }
+    else if(m>0&&n==0)
+    {
+        return ack(m-1,1);
+    }
+    else
+    {
+       return ack(m-1,ack(m,n-1));
+    }
+}
+
