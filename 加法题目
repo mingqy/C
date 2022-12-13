@@ -1,0 +1,171 @@
+#include <stdio.h>
+
+#include <stdlib.h>
+
+// 函数功能：计算两整型数之和，如果与用户输入的答案相同，则返回1，否则返回0
+
+
+
+int Add(int a, int b)
+
+
+
+{
+
+    int  answer,answer1;
+
+    answer1=a+b;
+
+    scanf("%d", &answer);
+
+    if(answer==answer1)
+
+    {
+
+    return 1;
+
+    }
+
+    else
+
+    {
+
+        return 0;
+
+    }
+
+ }
+
+
+
+// 函数功能：输出结果正确与否的信息，flag标志结果正确与否，chance记录同一道题做了几次
+
+
+
+void Print(int flag, int chance)
+
+
+
+{
+
+
+
+if (flag==1)
+
+
+
+printf("Right!\n");
+
+
+
+else if (flag==0&&chance < 3)
+
+
+
+printf("Not correct. Try again!\n");
+
+
+
+else
+
+
+
+printf("Not correct. You have tried three times!\nTest over!\n");
+
+
+
+}
+
+int main()
+
+{
+
+    int  a, b, answer, chance;
+
+    scanf("%d,%d",&a,&b);
+
+    for(chance=1;chance<=3;chance++)
+
+    {
+
+    answer=Add(a,b);
+
+    Print(answer,chance);
+
+    }
+
+    return 0;
+
+}
+
+
+
+正确答案：
+程序语言 C/C++
+#include <stdio.h>
+
+// 函数功能：计算两整型数之和，如果与用户输入的答案相同，则返回1，否则返回0
+
+int Add(int a, int b)
+
+{
+
+    int  answer;
+
+    printf("%d+%d=", a, b);
+
+    scanf("%d", &answer);
+
+    return a+b==answer ? 1 : 0;    
+
+}
+
+// 函数功能：输出结果正确与否的信息，flag标志结果正确与否，chance记录同一道题做了几次
+
+void Print(int flag, int chance)
+
+{
+
+    if (flag) 
+
+        printf("Right!\n");
+
+    else if (chance < 3)
+
+        printf("Not correct. Try again!\n");
+
+    else 
+
+        printf("Not correct. You have tried three times!\nTest over!\n");
+
+}
+
+int main(void) 
+
+{
+
+    int  a, b, answer, chance;
+
+    printf("Input a,b:");
+
+    /*************** Begin ***************/
+
+    scanf("%d,%d", &a, &b);
+
+    chance = 0;
+
+    do{
+
+        answer = Add(a, b);       
+
+        chance++;
+
+        Print(answer, chance);                  
+
+    }while ((answer == 0) && (chance < 3));
+
+    /*************** End ***************/
+
+    return 0;
+
+}
