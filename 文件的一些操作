@@ -1,0 +1,49 @@
+#include <stdio.h>
+#include <stdlib.h>
+int main()
+{
+    FILE *fp;
+    char ch;
+    if((fp=fopen("demo.txt","w"))==NULL)
+    {
+        printf("error!");
+        exit(0);
+    }
+    ch=getchar();
+    while(ch!='\n')
+    {
+        fputc(ch,fp);
+        ch=getchar();
+    }
+    fclose(fp);
+    return 0;
+}
+#include <stdio.h>
+#include <stdlib.h>
+int main()
+{
+    FILE *fp;
+    char ch;
+    int i;
+    if((fp=fopen("demo.txt","wb"))==NULL)
+    {
+        printf("error!");
+        exit(0);
+    }
+    for(i=0;i<128;i++)
+    {
+        fputc(i,fp);
+    }
+    fclose(fp);
+    if((fp=fopen("demo.txt","rb"))==NULL)
+    {
+        printf("error");
+        exit(0);
+    }
+    while((ch=fgetc(fp))!=EOF)
+    {
+        putchar(ch);
+    }
+    fclose(fp);
+    return 0;
+}
