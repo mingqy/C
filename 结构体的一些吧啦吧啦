@@ -1,0 +1,151 @@
+//学生的记录由学号和成绩组成，N 名学生的数据已在主函数中放入结构体数组 s 中，
+//编写函数 fun，返回指定学号的学生数据，指定的学号在主函数中输入。若没有找到指定学号，在结构体变量中给学号置空串，给成绩置−1，作为函数值返回
+#include <stdio.h>
+#include <string.h>
+#define N 16
+typedef struct
+{   
+char num[10];
+int  s;
+}STREC;
+STREC fun(STREC *a,char *b)
+{
+//************** code begin **************//
+int i;
+STREC p;
+for(i=0;i<N;i++)
+{
+        if(strcmp((a+i) -> num,b)==0)
+        {
+            p=*(a+i);
+             return p;
+        }
+}
+STREC st0={{" "},-1};
+return st0;
+//************** code end ****************//
+}
+void main ()
+{   STREC s[N]= {{"GA005",85}, {"GA003",76}, {"GA002",69}, {"GA004",85},{"GA001",91}, {"GA007",72}, {"GA008",64}, {"GA006",87},
+{"GA015",85}, {"GA013",91}, {"GA012",64}, {"GA014",91},{"GA011",77}, {"GA017",64}, {"GA018",64}, {"GA016",72}};
+STREC h;
+char m[10];
+gets(m);
+h=fun(s,m);
+printf( "%s %d\n",h.num,h.s);
+}
+//学生的记录由学号和成绩构成，N 名学生的数据已存入 a 结构体系数组中。编写函数 fun，找出成绩最低的学生记录，通过形参返回主函数（规定只有一个最低分）
+#include <stdio.h>
+
+#include <string.h>
+
+#define N 10
+
+typedef struct ss
+
+{   char num[10];
+
+int s;
+
+}STU;
+
+void fun(STU a[],STU *s)
+
+{
+//************** code begin **************//
+int i;
+for(i=0;i<N-1;i++)
+{
+    if(a[i].s<a[i+1].s)
+
+        *s=a[i];
+}
+//************** code end ****************//
+}
+void main()
+
+{   STU a[N]={ {"A01",81},{"A02",89},{"A03",66},{"A04",87},{"A05",77},
+
+{"A06",90},{"A07",79},{"A08",61},{"A09",80},{"A10",71} },m ;
+
+fun(a,&m);
+
+printf("%s %d\n",m.num,m.s);
+}
+//学生的记录由学号和成绩组成，N 名学生的数据已在主函数放入结构体数组 s 中，
+//编写函数 fun，把分数最低的学生数据放在 b 所指数组中。注：分数最低的学生可能不止一个，函数返回分数最低的学生的人数
+#include <stdio.h>
+
+#define N 16
+
+typedef struct
+
+{   char num[10];
+
+int s;
+
+}STREC;
+
+int fun(STREC *a,STREC *b)
+
+{
+
+//************** code begin **************//
+ int i,n=0;
+
+    for(i=0;i<N-1;i++)
+
+    {
+
+        if((a+i) -> s <(a+i+1) -> s)
+
+           {
+
+               *b=*(a+i);
+
+           }
+
+    }
+
+    for(i=0;i<N;i++)
+
+    {
+
+        if(b -> s ==(a+i) -> s)
+
+        {
+
+            *(b+n)=*(a+i);
+
+            n++;
+
+        }
+
+    }
+
+    return n;
+//************** code end ****************//
+
+}
+
+void main ()
+
+{   STREC s[N]= {{"GA05",85}, {"GA03",76}, {"GA02",69}, {"GA04",85},
+
+{"GA01",91}, {"GA07",72}, {"GA08",64}, {"GA06", 87},
+
+{"GA015",85}, {"GA013",91}, {"GA012",64}, {"GA014",91},
+
+{"GA011",91}, {"GA017",64}, {"GA018",64}, {"GA016",72}};
+
+STREC h[N];
+
+int i,n;
+
+n=fun(s,h);
+
+for (i=0;i<n;i++)
+
+printf ("%s %d\n",h[i].num,h[i].s);
+
+}
