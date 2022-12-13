@@ -1,0 +1,104 @@
+//猜数游戏(随机种子)
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+int main(void)
+{ int magic;
+   int guess;
+
+srand(11);
+   magic=rand()%100+1;
+   do
+   {
+   printf("Please guess a magic number:");
+   scanf("%d",&guess);
+   if(guess>magic)
+   printf("Wrong!Too high!\n");
+   else if(guess<magic)
+   printf("Wrong!Too low!\n");
+   else
+   {
+       printf("Right!\n");
+       printf("The number is:%d\n", magic);
+   }
+   }while(guess!=magic);
+
+    return 0;
+}
+//素数
+#include <stdio.h>
+#include <stdlib.h>
+int main()
+{
+    int number,a;
+    printf("Input n:\n");
+    scanf("%d",&number);
+    if(number==1) printf("%d is not a prime number\n",number);
+    else if(number<=0) printf("%d is not a prime number\n",number);
+    for(a=2,number>1;a<=number;a++)
+    {
+            if(number%a==0&&number!=a)
+            {
+                printf("%d is not a prime number\n",number);
+    
+                }
+            else if(number==a)
+            {
+                printf("%d is a prime number\n",number);
+            }
+    }
+    return 0;
+}
+//嵌套循环
+//已知要搬 36 块砖， 36 人搬，男一人搬 4 块砖，女一人搬 3 块砖，两个小孩合搬一块砖，要求一次搬完，问男、女、小孩各需多少人？要求采用多重循环语句。
+#include<stdio.h>
+
+int main()
+
+{ 
+
+   int a,b,c;  /*a,b,c临时变量存放男人女人和小孩的数量*/
+
+   int men,women,children;
+
+  for(a=0;a<9;a++)
+
+     for(b=0;b<12;b++)
+
+     {
+
+         c=36-a-b;
+
+         if(4*a+3*b+c/2.0==36)
+
+         {
+
+           men=a;
+
+           women=b;
+
+           children=c;
+
+         }
+
+      }
+
+printf("men is %d,women is %d,children is %d",men,women,children);
+
+return 0;
+
+}
+//逆序输出
+ do
+
+    {
+
+        n=number%10;
+
+        number=number/10;
+
+        printf("%d",n);
+
+
+
+    }while(number!=0);
