@@ -1,0 +1,412 @@
+#include <stdio.h>
+#include<stdlib.h>
+#include<windows.h>
+#include<graphics.h>
+#include<easyx.h>
+#include<conio.h>
+#include<mmsystem.h>
+#include<time.h>
+#include"budin.h"
+#pragma comment(lib,"winmm.lib")
+#define WIN_WIDTH 1200
+#define WIN_HEIGHT 800
+
+int count1=0;
+int num_guai=0;
+int boss=0;
+int a=0;
+typedef struct pokeman{
+int ID;
+char *name;
+int hp;
+int gongji;
+}POKEMAN;
+POKEMAN p[11]={{1,"pikaqiu",60,30},{2,"penghuolong",80,60},{3,"miaowahua",200,30},{4,"jiaherenwa",70,80},
+{5,"gengui",90,40},{6,"lukaliou",80,30},{7,"yibu",120,25},{8,"shanaiduo",100,60},
+{9,"hudi",120,50},{10,"dabiniao",100,40},{100,"boss",666,30}};
+
+void zhandou(POKEMAN player,POKEMAN computer);
+void bszhandou(POKEMAN player,POKEMAN computer);
+/*POKEMAN p[2]={2,"penghuolong",80,30};
+POKEMAN miaowahua={3,"miaowahua",130,20};
+POKEMAN jiaherenwa={4,"jiaherenwa",70,35};
+POKEMAN gengui={5,"gengui",90,25};
+POKEMAN lukaliou={6,"lukaliou",80,30};
+POKEMAN yibu={7,"yibu",100,25};
+POKEMAN shanaiduo={8,"shanaiduo",100,25};
+POKEMAN hudi={9,"hudi",100,25};
+POKEMAN dabiniao={10,"dabiniao",100,25};
+*/
+void BGM1()
+{
+    mciSendString("open  ./bgm1.mp3",0,0,0);
+    mciSendString("play  ./bgm1.mp3 repeat",0,0,0);
+}
+void BGM()
+{
+    mciSendString("open ./bgm.mp3",0,0,0);
+    mciSendString("play  ./bgm.mp3  repeat",0,0,0);
+}
+IMAGE img,imgback;
+IMAGE imgBar,imgbut1,imgbut2,imgbut3,imgmin,imgxz[2],daboss;
+IMAGE pok[11],jn1,jn2,jn3;
+
+void gameinit(){
+
+    BGM1();
+    initgraph(WIN_WIDTH,WIN_HEIGHT);
+
+    loadimage(&img,"./image/caidan.jpg",WIN_WIDTH,WIN_HEIGHT);
+    loadimage(&imgBar,"./image/Title.png");
+    loadimage(&imgbut1,"./image/button1.png");
+    loadimage(&imgbut2,"./image/button2.png");
+    loadimage(&imgbut3,"./image/button3.png");
+loadimage(&imgback,"./image/back.jpg",WIN_WIDTH,WIN_HEIGHT);
+loadimage(&imgxz[0],"./image/Xiaozhi.png");
+loadimage(&imgxz[1],"./image/Xiaozh.png");
+loadimage(&pok[0],"./image/皮卡丘.png");
+loadimage(&pok[1],"./image/喷火龙.png");
+loadimage(&pok[2],"./image/妙蛙花.png");
+loadimage(&pok[3],"./image/甲贺忍蛙.png");
+loadimage(&pok[4],"./image/耿鬼.png");
+loadimage(&pok[5],"./image/路卡利欧.png");
+loadimage(&pok[6],"./image/伊布.png");
+loadimage(&pok[7],"./image/沙奈朵.png");
+loadimage(&pok[8],"./image/胡地.png");
+loadimage(&pok[9],"./image/大比鸟.png");
+
+loadimage(&pok[10],"./image/BOSS.png");
+loadimage(&jn1,"./image/jn1.png");
+loadimage(&jn2,"./image/jn2.png");
+loadimage(&jn3,"./image/jn3.png");
+loadimage(&daboss,"./image/daboss.png");
+    putimage(0,0,&img);
+        putimage(250,0,&imgBar);
+        putimage(450,200,&imgbut1);
+        putimage(450,350,&imgbut2);
+        putimage(450,500,&imgbut3);
+
+
+}
+void mindan()
+{HWND aaa;aaa=GetHWnd();
+MessageBox(aaa,"项目经理：明秋雨\n程序员：盛思源 明秋雨\n图形版面制作：郎程闰\n剧情与内容设计:冒立言、张文强\n","制作人名单",MB_OK);
+}
+void bangzhu()
+{
+HWND aab;aab=GetHWnd();
+MessageBox(aab,"草丛中探险，人物可以通过按AWSD键自由走动，碰到宠后进入对战，走到BOSS进入BOSS对战。\n自己默认拥有皮卡丘，每次战胜对方后皮卡丘会强化。进入战斗后，点击技能进行出招\n只有一次挑战BOSS机会，战胜BOSS通关，战败则游戏结束\n注意：点击开始后需要按下键盘才能显示界面","帮助",MB_OK);
+}
+static int x_guai,y_guai,j;
+bool rectIntersect(int x01, int y01, int x02, int y02,
+    int x11, int y11, int x12, int y12)
+{
+    int zx = abs(x01 + x02 - x11 - x12);
+    int x = abs(x01 - x02) + abs(x11 - x12);
+    int zy = abs(y01 + y02 - y11 - y12);
+    int y = abs(y01 - y02) + abs(y11 - y12);
+    return  (zx <= x && zy <= y);
+}
+
+void gamestart(){
+putimage(0,0,&imgback);
+putimage(950,0,&daboss);
+
+
+}
+
+void shuaguai(){
+if(num_guai==0)
+    {
+    j=rand()%8+1;
+    x_guai=rand()%600+300;
+    y_guai=rand()%400+200;
+    num_guai=1;
+    }
+else{
+
+    putimagePNG2(x_guai,y_guai,WIN_WIDTH,&pok[j]);
+
+}
+}
+
+int x_xz=30,y_xz=30,i=1;
+void checkHit(){
+int x01=x_xz,y01=y_xz;
+int x02=x_xz+76,y02=y_xz+120;
+int x11=x_guai,y11=y_guai;
+int x12=x_guai+50,y12=y_guai+50;
+    if(rectIntersect(x01,y01,x02,y02,x11,y11,x12,y12))
+    {
+
+        num_guai=0;
+        zhandou(p[0],p[j]);
+    }
+    if(rectIntersect(x01,y02,x02,y02,950,0,1200,200))
+    {
+        boss=1;
+        zhandou(p[0],p[10]);
+    }
+
+}
+
+void gameupdate(){
+i=(i+1)%2;
+putimagePNG2(x_xz,y_xz,WIN_WIDTH,&imgxz[i]);
+
+        char key=_getch();
+        switch (key)
+        {
+        case 'w':
+            y_xz-=8;
+            i=1;
+            break;
+        case 'a':
+            x_xz-=8;
+            break;
+            case 's':
+            y_xz+=8;
+            break;
+            case 'd':
+            x_xz+=8;
+            break;
+
+
+        }
+
+
+checkHit();
+
+
+
+
+
+}
+void zhandou(POKEMAN player,POKEMAN computer)
+{
+    int hp1,hp2,gj1,gj2;
+    int round =1;
+    hp1=player.hp+count1*10;hp2=computer.hp;
+    gj1=player.gongji+count1*10;gj2=computer.gongji;
+
+
+    while(1)
+    {
+        BeginBatchDraw();
+        putimage(0,0,&imgback);
+        putimagePNG2(200,300,WIN_WIDTH,&pok[0]);
+        if(boss==0)
+        {
+
+
+        putimagePNG2(800,300,WIN_WIDTH,&pok[j]);
+        fillrectangle(750,250,750+hp2*2,260);
+        }
+        else
+        {
+            mciSendString("close ./bgm1.mp3",0,0,0);
+                mciSendString("close ./bgm.mp3",0,0,0);
+                if(a==0)
+                {
+                    mciSendString("open  ./exc.mp3",0,0,0);
+                    mciSendString("play  ./exc.mp3 repeat",0,0,0);
+                    a++;
+                }
+             putimagePNG2(800,100,WIN_WIDTH,&pok[10]);
+             fillrectangle(750,100,750+hp2,110);
+        }
+        putimage(100,500,&jn1);
+        putimage(400,500,&jn2);
+        putimage(700,500,&jn3);
+        fillrectangle(150,250,150+hp1*2,260);
+
+        if(MouseHit)
+            {
+                MOUSEMSG msg=GetMouseMsg();
+                if(msg.uMsg==WM_LBUTTONDOWN&&msg.x>=100&&msg.x<=375&&msg.y>=500&&msg.y<=693)
+                {
+                hp2-=rand()%gj1;
+                hp1-=rand()%gj2;
+                }
+                if(msg.uMsg==WM_LBUTTONDOWN&&msg.x>=400&&msg.x<=675&&msg.y>=500&&msg.y<=693)
+                {
+                hp2-=rand()%gj1+10;
+                hp1-=rand()%gj2+10;
+                }
+                if(msg.uMsg==WM_LBUTTONDOWN&&msg.x>=700&&msg.x<=975&&msg.y>=200&&msg.y<=693)
+                {
+                hp2-=gj1+rand()%gj1;
+                hp1-=gj2+rand()%gj2;
+                }
+
+            }
+        if(hp2<=0&&boss==0)
+        {
+            HWND aac;aac=GetHWnd();
+            MessageBox(aac,"战斗胜利，你的皮卡丘变强了","赢了",MB_OK);
+
+            count1++;
+            break;
+        }
+        if(hp1<=0&&boss==0)
+        {
+            HWND aad;aad=GetHWnd();
+            MessageBox(aad,"战斗失败，再接再厉","输了",MB_OK);
+            break;
+        }
+       if(hp1<=0&&boss==1)
+        {
+            mciSendString("close ./exc.mp3",0,0,0);
+            mciSendString("open  ./sile.mp3",0,0,0);
+                    mciSendString("play  ./sile.mp3 ",0,0,0);
+            HWND aad;aad=GetHWnd();
+
+            MessageBox(aad,"游戏结束","输了",MB_OK);
+            cleardevice();
+            break;
+        }
+        if(hp2<=0&&boss==1)
+        {
+            mciSendString("close ./exc.mp3",0,0,0);
+            mciSendString("open  ./win.mp3",0,0,0);
+                    mciSendString("play  ./win.mp3 ",0,0,0);
+            HWND aad;aad=GetHWnd();
+
+            MessageBox(aad,"你赢了！","赢了",MB_OK);
+            cleardevice();
+            break;
+        }
+
+        EndBatchDraw();
+
+    }
+
+
+}
+int main()
+{
+    srand(time(NULL));
+    gameinit();//游戏初始化
+    while(1){
+
+            if(MouseHit)
+            {
+                MOUSEMSG msg=GetMouseMsg();
+                if(msg.uMsg==WM_LBUTTONDOWN&&msg.x>=450&&msg.x<=700&&msg.y>=350&&msg.y<=470)
+                {
+                mindan();
+                }
+                if(msg.uMsg==WM_LBUTTONDOWN&&msg.x>=450&&msg.x<=700&&msg.y>=500&&msg.y<=620)
+                {
+                bangzhu();
+                }
+                if(msg.uMsg==WM_LBUTTONDOWN&&msg.x>=450&&msg.x<=700&&msg.y>=200&&msg.y<=320)
+                {
+                cleardevice();
+                mciSendString("close ./bgm1.mp3",0,0,0);
+                break;
+                }
+
+            }
+
+
+    }
+    BGM();
+
+    while(boss==0)
+    {
+
+        BeginBatchDraw();
+        gamestart();
+        shuaguai();
+        gameupdate();
+
+
+
+
+
+        EndBatchDraw();
+
+
+    }
+    getchar();
+}
+//下面为补丁
+#ifndef BUDIN_H_INCLUDED
+#define BUDIN_H_INCLUDED
+#include <stdio.h>
+#include<stdlib.h>
+#include<windows.h>
+#include<graphics.h>
+
+#include<conio.h>
+#include<mmsystem.h>
+#include<time.h>
+#pragma comment(lib,"winmm.lib")
+#define WIN_WIDTH 1200
+#define WIN_HEIGHT 800
+
+
+
+
+void putimagePNG(int  picture_x, int picture_y, IMAGE* picture) //x为载入图片的X坐标，y为Y坐标
+{
+    DWORD* dst = GetImageBuffer();    // GetImageBuffer()函数，用于获取绘图设备的显存指针，EASYX自带
+    DWORD* draw = GetImageBuffer();
+    DWORD* src = GetImageBuffer(picture); //获取picture的显存指针
+    int picture_width = picture->getwidth(); //获取picture的宽度，EASYX自带
+    int picture_height = picture->getheight(); //获取picture的高度，EASYX自带
+    int graphWidth = getwidth();       //获取绘图区的宽度，EASYX自带
+    int graphHeight = getheight();     //获取绘图区的高度，EASYX自带
+    int dstX = 0;    //在显存里像素的角标
+
+    // 实现透明贴图 公式： Cp=αp*FP+(1-αp)*BP ， 贝叶斯定理来进行点颜色的概率计算
+    for (int iy = 0; iy < picture_height; iy++)
+    {
+        for (int ix = 0; ix < picture_width; ix++)
+        {
+            int srcX = ix + iy * picture_width; //在显存里像素的角标
+            int sa = ((src[srcX] & 0xff000000) >> 24); //0xAArrggbb;AA是透明度
+            int sr = ((src[srcX] & 0xff0000) >> 16); //获取RGB里的R
+            int sg = ((src[srcX] & 0xff00) >> 8);   //G
+            int sb = src[srcX] & 0xff;              //B
+            if (ix >= 0 && ix <= graphWidth && iy >= 0 && iy <= graphHeight && dstX <= graphWidth * graphHeight)
+            {
+                dstX = (ix + picture_x) + (iy + picture_y) * graphWidth; //在显存里像素的角标
+                int dr = ((dst[dstX] & 0xff0000) >> 16);
+                int dg = ((dst[dstX] & 0xff00) >> 8);
+                int db = dst[dstX] & 0xff;
+                draw[dstX] = ((sr * sa / 255 + dr * (255 - sa) / 255) << 16)  //公式： Cp=αp*FP+(1-αp)*BP  ； αp=sa/255 , FP=sr , BP=dr
+                    | ((sg * sa / 255 + dg * (255 - sa) / 255) << 8)         //αp=sa/255 , FP=sg , BP=dg
+                    | (sb * sa / 255 + db * (255 - sa) / 255);              //αp=sa/255 , FP=sb , BP=db
+            }
+        }
+    }
+}
+void putimagePNG2(int x, int y, int winWidth, IMAGE* picture) {
+    IMAGE imgTmp;
+    if (y < 0) {
+        SetWorkingImage(picture);
+        getimage(&imgTmp, 0, -y,
+            picture->getwidth(), picture->getheight() + y);
+        SetWorkingImage();
+        y = 0;
+        picture = &imgTmp;
+    }
+
+    else if (x >= winWidth) {
+        return;
+    }
+    else if (x > winWidth-picture->getwidth()) {
+        SetWorkingImage(picture);
+        getimage(&imgTmp, 0, 0, winWidth - x, picture->getheight());
+        SetWorkingImage();
+        picture = &imgTmp;
+    }
+
+    putimagePNG(x, y, picture);
+
+}
+
+
+#endif // BUDIN_H_INCLUDED
